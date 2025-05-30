@@ -5,14 +5,12 @@ from telethon import TelegramClient, events
 from telebot import TeleBot, types
 from telethon.tl.types import MessageMediaPhoto
 
-# .env'den değerleri al
 api_id = int(os.getenv("API_ID"))
 api_hash = os.getenv("API_HASH")
 bot_token = os.getenv("BOT_TOKEN")
-channel_id = os.getenv("CHANNEL_ID")  # Örnek: @novasporhaber
-source_channel = os.getenv("SOURCE_CHANNEL")  # Örnek: gdhspor
+channel_id = os.getenv("CHANNEL_ID")  # örn: @novasporhaber
+source_channel = os.getenv("SOURCE_CHANNEL")  # örn: gdhspor
 
-# Bot başlat
 bot = TeleBot(bot_token)
 client = TelegramClient("bot", api_id, api_hash)
 
@@ -54,13 +52,15 @@ async def handler(event):
         bot.send_message(channel_id, mesaj)
 
 async def main():
+    print("🔁 Bot başlatılıyor...")
     await client.start(bot_token=bot_token)
-    print("✅ Bot bağlantısı sağlandı.")
+    print("✅ Bot çalışıyor ve dinleniyor...")
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
     except Exception as e:
-        print(f"❌ Başlatma hatası: {e}")
-        time.sleep(5)
+        print(f"❌ Hata oluştu: {e}")
+        time.sleep(10)
