@@ -5,12 +5,14 @@ from telethon import TelegramClient, events
 from telebot import TeleBot, types
 from telethon.tl.types import MessageMediaPhoto
 
+# .env'den değerleri al
 api_id = int(os.getenv("API_ID"))
 api_hash = os.getenv("API_HASH")
 bot_token = os.getenv("BOT_TOKEN")
-channel_id = os.getenv("CHANNEL_ID")  # Örnek: '@novasporhaber'
-source_channel = os.getenv("SOURCE_CHANNEL")  # Örnek: 'gdhspor'
+channel_id = os.getenv("CHANNEL_ID")  # Örnek: @novasporhaber
+source_channel = os.getenv("SOURCE_CHANNEL")  # Örnek: gdhspor
 
+# Bot başlat
 bot = TeleBot(bot_token)
 client = TelegramClient("bot", api_id, api_hash)
 
@@ -19,7 +21,7 @@ media_gruplari = {}
 @client.on(events.NewMessage(chats=source_channel))
 async def handler(event):
     mesaj = event.message.message or ""
-    
+
     if event.message.grouped_id:
         grup_id = event.message.grouped_id
         if grup_id not in media_gruplari:
@@ -53,8 +55,12 @@ async def handler(event):
 
 async def main():
     await client.start(bot_token=bot_token)
-    print("Bot çalışıyor...")
+    print("✅ Bot bağlantısı sağlandı.")
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        print(f"❌ Başlatma hatası: {e}")
+        time.sleep(5)
