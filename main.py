@@ -7,7 +7,6 @@ from keep_alive import keep_alive
 
 keep_alive()
 
-# Ortam değişkenlerinden alınıyor (Railway ile uyumlu)
 api_id = int(os.environ.get("API_ID"))
 api_hash = os.environ.get("API_HASH")
 bot_token = os.environ.get("BOT_TOKEN")
@@ -16,7 +15,7 @@ source_channel = os.environ.get("SOURCE_CHANNEL")
 
 bot = telebot.TeleBot(bot_token)
 
-# Kullanıcı doğrulama istemeyen, doğrudan bot token ile giriş:
+# HATA BURADA OLUYORDU — DOĞRU HALİ BU:
 client = TelegramClient('anon', api_id, api_hash).start(bot_token=bot_token)
 
 media_gruplari = {}
@@ -26,7 +25,6 @@ async def yeni_haber(event):
     try:
         mesaj = event.message.message or ""
 
-        # GALERİLİ MEDYA
         if event.message.grouped_id:
             grup_id = event.message.grouped_id
             if grup_id not in media_gruplari:
@@ -47,7 +45,6 @@ async def yeni_haber(event):
                 del media_gruplari[grup_id]
             return
 
-        # TEK GÖRSEL / VİDEO
         if event.message.media:
             medya_yolu = await event.message.download_media()
             if medya_yolu:
